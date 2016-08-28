@@ -20,7 +20,7 @@ curl -i -u Administrator:password -X POST http://127.0.0.1:8091/settings/indexes
 curl -v -u Administrator:password -X POST http://127.0.0.1:8091/pools/default/buckets -d name=fx-example -d bucketType=couchbase -d ramQuotaMB=256 -d authType=sasl
 
 # Create primary index on bucket
-sleep 10
-curl -v http://127.0.0.1:8093/query/service -d 'statement=create primary index on fx-example'
+sleep 15
+curl -v http://127.0.0.1:8093/query/service -d 'statement=create primary index on `fx-example`'
 
 fg 1
