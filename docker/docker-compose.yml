@@ -1,0 +1,16 @@
+version: "2"
+services:
+  db:
+    image: arungupta/couchbase-javafx-example
+    ports:
+      - 8091:8091
+      - 8092:8092 
+      - 8093:8093 
+      - 11210:11210
+  gateway:
+    image: arungupta/sync-gateway-javafx-example
+    depends_on:
+      - db
+    ports:
+      - 4984:4984
+    command: /opt/sync-gateway-config.json

@@ -1,0 +1,11 @@
+= Couchbase + Sync Gateway Docker Compose
+
+== Couchbase Image
+
+. Build the image: `docker build -t arungupta/couchbase-javafx-example ./server`
+. Push the image: `docker push arungupta/couchbase-javafx-example`
+
+== Sync Gateway Image
+
+. Build the image: `docker build -t arungupta/sync-gateway-javafx-example ./sync-gateway`
+. Push the image: `docker push arungupta/sync-gateway-javafx-example`
