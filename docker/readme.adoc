@@ -1,11 +1,17 @@
 = Couchbase + Sync Gateway Docker Compose
 
-== Couchbase Image
+== Couchbase
 
-. Build the image: `docker build -t arungupta/couchbase-javafx-example ./server`
-. Push the image: `docker push arungupta/couchbase-javafx-example`
+. Run the container: `docker-compose run -d --service-ports --name db db`
 
-== Sync Gateway Image
+Optionally, you may like to build the image:
 
+```
+docker build -t arungupta/couchbase-javafx-example ./server
+```
+
+== Sync Gateway
+
+. Set IP address of Couchbase server in Sync Gateway config file: `sed -i '' s/HOST/$(docker inspect --format='{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' db)/g sync-gateway/sync-gateway-config.json`
 . Build the image: `docker build -t arungupta/sync-gateway-javafx-example ./sync-gateway`
-. Push the image: `docker push arungupta/sync-gateway-javafx-example`
+. Run the container: `docker-compose run -d --service-ports --name gateway gateway`
