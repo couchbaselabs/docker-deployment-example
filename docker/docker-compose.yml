@@ -9,8 +9,6 @@ services:
       - 11210:11210
   gateway:
     image: arungupta/sync-gateway-javafx-example
-    depends_on:
-      - db
     ports:
       - 4984:4984
     command: /opt/sync-gateway-config.json
