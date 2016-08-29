@@ -2,7 +2,7 @@
     "log":["CRUD+", "REST+", "Changes+", "Attach+"],
     "databases": {
         "fx-example": {
-            "server":"http://$HOST:8091",
+            "server":"http://HOST:8091",
             "sync":`
                 function (doc) {
                     channel (doc.channels);
