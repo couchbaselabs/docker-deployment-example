@@ -1,0 +1,77 @@
+= Couchbase + Sync Gateway Docker Compose
+
+The purpose of this example is to get Couchbase Server and Couchbase Sync Gateway up and running using Docker containers.  In the process, Couchbase Server will be provisioned to have a single bucket with a primary index and Couchbase Sync Gateway will be provisioned to communicate with the running Couchbase Server instance.
+
+== Couchbase
+
+While a Couchbase Server Docker image exists for easy access, this example will build one based on the **Dockerfile** specified.  To build a Couchbase Server image, execute the following:
+
+```
+docker build -t couchbase-server-example ./server
+```
+
+The image above will be named **couchbase-server-example** and it will be constructed via the **Dockerfile** found in the **server** directory.
+
+To run the freshly created image, execute the following command:
+
+```
+docker-compose run -d --service-ports --name db db
+```
+
+The above command will use the **docker-compose.yml** file to launch the **db** service with the listed port mappings.
+
+== Sync Gateway
+
+Like with Couchbase Server, a Couchbase Sync Gateway image is available for easy access.  However, in this example we'll build an image and use that instead.
+
+For these instructions to be successful, the **couchbase-server-example** container must already be running.  With the container running, execute the following:
+
+```
+sed -i '' s/HOST/$(docker inspect --format='{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' db)/g sync-gateway/sync-gateway-config.json
+```
+
+The above command will find the IP address of the running container and inject it into the **sync-gateway/sync-gateway-config.json** file, replacing the `HOST` placeholder.
+
+With the correct IP address in place, the image needs to be built.  Execute the following command:
+
+```
+docker build -t couchbase-sync-gateway-example ./sync-gateway
+```
+
+The above command will create an image called **couchbase-sync-gateway-example** based on the **Dockerfile** found in the **sync-gateway** directory.
+
+To run the image, execute the following:
+
+```
+docker-compose run -d --service-ports --name gateway gateway
+```
+
+The above command will use the **docker-compose.yml** file to launch the **gateway** service with the listed port mappings.
+
+== Cleanup
+
+Should you decide you'd like to remove anything that was done, we can first remove the currently running containers:
+
+```
+docker rm -f gateway
+docker rm -f db
+```
+
+The above commands will remove the two containers we created based on their name.  To remove the image associated with the containers, execute the following:
+
+```
+docker rmi -f couchbase-sync-gateway-example
+docker rmi -f couchbase-server-example
+```
+
+You can verify that everything was stopped and removed by executing the following to check for running containers:
+
+```
+docker ps -a
+```
+
+Then the following will check for any installed images:
+
+```
+docker images
+```
